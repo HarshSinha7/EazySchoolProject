@@ -8,10 +8,10 @@
         <version>3.4.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.eazybytes</groupId>
-    <artifactId>example_36</artifactId>
+    <groupId>com.project</groupId>
+    <artifactId>EazySchoolProject</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>example_36</name>
+    <name>eazyschool</name>
     <description>Eazy School Web Application</description>
     <properties>
         <java.version>21</java.version>

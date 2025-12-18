@@ -25,8 +25,6 @@ public class ContactService {
     private ContactRepository contactRepository;
 
     public boolean saveMessageDetails(Contact contact) {
-        contact.setCreatedAt(LocalDateTime.now());
-        contact.setCreatedBy("HARSH VIJAY");
         contact.setStatus("OPEN");
         Contact contactObj = contactRepository.save(contact);
         if (contactObj.getContactId() > 0) {
@@ -34,13 +32,11 @@ public class ContactService {
         }
         return false;
     }
-    public boolean updateMsgStatus(int id, String auth){
+    public boolean updateMsgStatus(int id){
         boolean sucessOperation=false;
         Optional<Contact> option=contactRepository.findById(id);
         if(option.isPresent()){
             option.get().setStatus("Closed");
-            option.get().setUpdatedAt(LocalDateTime.now());
-            option.get().setUpdatedBy(auth);
             Contact updatedContact=contactRepository.save(option.get());
             sucessOperation=true;
         }
