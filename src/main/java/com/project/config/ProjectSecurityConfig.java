@@ -18,10 +18,11 @@ public class ProjectSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                // CSRF ENABLED, except for /saveMsg (correct syntax)
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/saveMsg"))
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/saveMsg").
+                        ignoringRequestMatchers("/public/**"))
 
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/dashboard").authenticated()
                         .requestMatchers("/displayMessages").hasRole("ADMIN")
                         .requestMatchers("/closeMsg/**").hasRole("ADMIN")

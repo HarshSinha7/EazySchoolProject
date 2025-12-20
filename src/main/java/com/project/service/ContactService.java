@@ -1,6 +1,5 @@
 package com.project.service;
 
-import com.project.constants.EazySchoolConstants;
 import com.project.model.Contact;
 import com.project.repository.ContactRepository;
 import jakarta.validation.groups.ConvertGroup;
