@@ -21,8 +21,18 @@ public class RegisterController {
         return "register.html";
     }
     @RequestMapping(value = "/createUser", method = {RequestMethod.POST})
-    public String saveRegisterDetails(@Valid @ModelAttribute("person") Person person, Errors error){
+    public String saveRegisterDetails(@Valid @ModelAttribute("person") Person person, Errors error, Model model){
         if(error.hasErrors()){
+            return "register.html";
+        }
+        if(!person.getEmail().equals(person.getConfirmEmail())){
+            model.addAttribute("emailValidate", true);
+            model.addAttribute("emailValidateMessage", "Emails didn't match");
+            return "register.html";
+        }
+        if(!person.getPassword().equals(person.getConfirmPassword())){
+            model.addAttribute("passwordValidate", true);
+            model.addAttribute("passwordValidateMessage", "Passwords didn't match");
             return "register.html";
         }
         if(registerService.saveDetails("Student", person)){

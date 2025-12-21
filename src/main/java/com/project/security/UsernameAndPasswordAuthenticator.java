@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -19,12 +20,14 @@ import java.util.List;
 public class UsernameAndPasswordAuthenticator implements AuthenticationProvider {
     @Autowired
     RegisterRepo registerRepo;
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
     public Authentication authenticate(Authentication authentication){
         String username=authentication.getName();
         String password= authentication.getCredentials().toString();
         Person person=registerRepo.getByName(username);
         if(person.getName()!=null && person.getPersonId()>=1){
-            if(person.getPassword().equals(password)){
+            if(bCryptPasswordEncoder.matches(person.getPassword(),password)){
                 return new UsernamePasswordAuthenticationToken(username, password, grantedAuthorityList(person.getRoles()));
             }
         }

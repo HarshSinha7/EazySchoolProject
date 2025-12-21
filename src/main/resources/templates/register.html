@@ -68,8 +68,10 @@ Author URL: http://w3layouts.com
                                            class="contact-input" />
                                 </div>
                                 <div class="col-sm-6">
+                                    <p th:if="${emailValidate}" th:text="${emailValidateMessage}" class="alert alert-danger"></p>
                                     <input type="text" th:field="*{confirmEmail}" placeholder="Confirm Email"
                                            class="contact-input" />
+
                                 </div>
                             </div>
                             <div class="row">
@@ -78,6 +80,7 @@ Author URL: http://w3layouts.com
                                            class="contact-input" />
                                 </div>
                                 <div class="col-sm-6">
+                                    <p th:if="${passwordValidate}" th:text="${passwordValidateMessage}" class="alert alert-danger"></p>
                                     <input type="password" th:field="*{confirmPassword}" placeholder="Confirm Password"
                                            class="contact-input" />
                                 </div>
