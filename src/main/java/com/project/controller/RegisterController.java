@@ -36,7 +36,7 @@ public class RegisterController {
             return "register.html";
         }
         if(registerService.saveDetails("Student", person)){
-            return "redirect:/login?register=true";
+            return "redirect:/login.html";
         }
         return "register.html";
     }

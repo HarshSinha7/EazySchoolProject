@@ -36,6 +36,9 @@ public class ProjectSecurityConfig {
                         .requestMatchers("/assets/**").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/logout").permitAll()
+                        .requestMatchers("displayProfile").authenticated()
+                        .requestMatchers("updateProfile").authenticated()
+
                         .anyRequest().authenticated()
                 )
 

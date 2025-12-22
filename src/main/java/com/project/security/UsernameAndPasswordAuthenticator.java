@@ -25,11 +25,12 @@ public class UsernameAndPasswordAuthenticator implements AuthenticationProvider 
     public Authentication authenticate(Authentication authentication){
         String username=authentication.getName();
         String password= authentication.getCredentials().toString();
-        Person person=registerRepo.getByName(username);
-        if(person.getName()!=null && person.getPersonId()>=1){
-            if(bCryptPasswordEncoder.matches(person.getPassword(),password)){
-                return new UsernamePasswordAuthenticationToken(username, password, grantedAuthorityList(person.getRoles()));
-            }
+        Person person=registerRepo.getByEmail(username);
+        if(person==null){
+            throw new BadCredentialsException("User not found");
+        }
+        if(bCryptPasswordEncoder.matches(password, person.getPassword())){
+            return new UsernamePasswordAuthenticationToken(person.getEmail(), null, grantedAuthorityList(person.getRoles()));
         }
         throw new BadCredentialsException("Invalid Credentials");
     }
