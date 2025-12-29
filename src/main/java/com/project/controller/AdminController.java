@@ -4,6 +4,7 @@ import com.project.model.Classes;
 import com.project.model.Person;
 import com.project.repository.ClassesRepository;
 import com.project.repository.RegisterRepo;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,6 +52,37 @@ public class AdminController {
         }
         classesRepository.deleteById(id);
         ModelAndView view=new ModelAndView("redirect:/admin/displayClasses");
+        return view;
+    }
+
+    @RequestMapping(value = "/displayStudents")
+    public ModelAndView displayStudents(@RequestParam(value = "classId") int id,@RequestParam(value="error", required = false)boolean error, HttpSession session){
+        ModelAndView view=new ModelAndView("students.html");
+        Optional<Classes> classes=classesRepository.findById(id);
+        view.addObject("person", new Person());
+        view.addObject("eazyClass", classes.get());
+        session.setAttribute("eazyClass",classes.get());
+        if(error){
+            String errorMessage = "Invalid Email entered!!";
+            view.addObject("errorMessage", errorMessage);
+        }
+        return view;
+    }
+
+    @RequestMapping(value = "/addStudents")
+    public ModelAndView addStudents(@ModelAttribute("person") Person person, Errors errors, HttpSession httpSession){
+        ModelAndView view=new ModelAndView("students.html");
+        Person person1=registerRepo.getByEmail(person.getEmail());
+        if(person1!=null || !(person1.getPersonId()>0)){
+            view.setViewName("redirect:/admin/displayStudents?error=true");
+            return view;
+        }
+        Classes classes=(Classes)httpSession.getAttribute("eazyClass");
+        person1.setClasses(classes);
+        registerRepo.save(person1);
+        classes.getPersons().add(person1);
+        classes.getPersons().add(person1);
+        view.setViewName("redirect:/admin/displayStudents?classId="+classes.getClassId());
         return view;
     }
 }
