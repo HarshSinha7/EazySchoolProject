@@ -24,7 +24,7 @@ public class AdminController {
     @Autowired
     RegisterRepo registerRepo;
 
-    @RequestMapping(value = "/displayClasses")
+    @RequestMapping(value = "/displayClasses", method = RequestMethod.GET)
     public ModelAndView classesController(){
         List<Classes> classList=classesRepository.findAll();
         ModelAndView view=new ModelAndView("classes.html");
@@ -43,7 +43,7 @@ public class AdminController {
         return view;
     }
 
-    @RequestMapping(value = "/deleteClass")
+    @PostMapping(value = "/deleteClass")
     public ModelAndView deleteClass(@RequestParam int id){
         Optional<Classes> optional=classesRepository.findById(id);
         for(Person person:optional.get().getPersons()){
@@ -55,7 +55,7 @@ public class AdminController {
         return view;
     }
 
-    @RequestMapping(value = "/displayStudents")
+    @GetMapping(value = "/displayStudents")
     public ModelAndView displayStudents(@RequestParam(value = "classId") int id,@RequestParam(value="error", required = false)boolean error, HttpSession session){
         ModelAndView view=new ModelAndView("students.html");
         Optional<Classes> classes=classesRepository.findById(id);
@@ -69,7 +69,7 @@ public class AdminController {
         return view;
     }
 
-    @RequestMapping(value = "/addStudent")
+    @PostMapping(value = "/addStudent")
     public ModelAndView addStudents(@ModelAttribute("person") Person person, Errors errors, HttpSession httpSession){
         ModelAndView view=new ModelAndView("students.html");
         Person person1=registerRepo.getByEmail(person.getEmail());
@@ -85,7 +85,7 @@ public class AdminController {
         view.setViewName("redirect:/admin/displayStudents?classId="+classes.getClassId());
         return view;
     }
-    @RequestMapping(value = "/deleteStudent")
+    @PostMapping(value = "/deleteStudent")
     public ModelAndView deleteStudents(@RequestParam(value = "classId")int id, HttpSession session){
         Classes classes=(Classes)session.getAttribute("class");
         Optional<Person> person=registerRepo.findById(id);
