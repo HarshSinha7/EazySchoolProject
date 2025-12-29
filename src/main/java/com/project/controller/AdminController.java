@@ -8,10 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -46,7 +43,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/deleteClass")
-    public ModelAndView deleteClass(@PathVariable("id") int id){
+    public ModelAndView deleteClass(@RequestParam int id){
         Optional<Classes> optional=classesRepository.findById(id);
         for(Person person:optional.get().getPersons()){
             person.setClasses(null);
