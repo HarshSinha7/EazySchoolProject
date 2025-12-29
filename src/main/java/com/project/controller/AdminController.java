@@ -61,7 +61,7 @@ public class AdminController {
         Optional<Classes> classes=classesRepository.findById(id);
         view.addObject("person", new Person());
         view.addObject("eazyClass", classes.get());
-        session.setAttribute("eazyClass",classes.get());
+        session.setAttribute("class",classes.get());
         if(error){
             String errorMessage = "Invalid Email entered!!";
             view.addObject("errorMessage", errorMessage);
@@ -69,7 +69,7 @@ public class AdminController {
         return view;
     }
 
-    @RequestMapping(value = "/addStudents")
+    @RequestMapping(value = "/addStudent")
     public ModelAndView addStudents(@ModelAttribute("person") Person person, Errors errors, HttpSession httpSession){
         ModelAndView view=new ModelAndView("students.html");
         Person person1=registerRepo.getByEmail(person.getEmail());
@@ -77,12 +77,23 @@ public class AdminController {
             view.setViewName("redirect:/admin/displayStudents?error=true");
             return view;
         }
-        Classes classes=(Classes)httpSession.getAttribute("eazyClass");
+        Classes classes=(Classes)httpSession.getAttribute("class");
         person1.setClasses(classes);
         registerRepo.save(person1);
         classes.getPersons().add(person1);
         classes.getPersons().add(person1);
         view.setViewName("redirect:/admin/displayStudents?classId="+classes.getClassId());
         return view;
+    }
+    @RequestMapping(value = "/deleteStudent")
+    public ModelAndView deleteStudents(@RequestParam(value = "classId")int id, HttpSession session){
+        Classes classes=(Classes)session.getAttribute("class");
+        Optional<Person> person=registerRepo.findById(id);
+        person.get().setClasses(null);
+        classes.getPersons().remove(person);
+        Classes classes1=classesRepository.save(classes);
+        session.setAttribute("class", classes1);
+        ModelAndView modelAndView = new ModelAndView("redirect:/admin/displayStudents?classId="+classes1.getClassId());
+        return modelAndView;
     }
 }
