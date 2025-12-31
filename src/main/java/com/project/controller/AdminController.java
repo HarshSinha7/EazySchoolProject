@@ -1,8 +1,10 @@
 package com.project.controller;
 
 import com.project.model.Classes;
+import com.project.model.Courses;
 import com.project.model.Person;
 import com.project.repository.ClassesRepository;
+import com.project.repository.CourseRepository;
 import com.project.repository.RegisterRepo;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -23,6 +25,9 @@ public class AdminController {
 
     @Autowired
     RegisterRepo registerRepo;
+
+    @Autowired
+    CourseRepository courseRepository;
 
     @RequestMapping(value = "/displayClasses", method = RequestMethod.GET)
     public ModelAndView classesController(){
@@ -95,5 +100,21 @@ public class AdminController {
         session.setAttribute("class", classes1);
         ModelAndView modelAndView = new ModelAndView("redirect:/admin/displayStudents?classId="+classes1.getClassId());
         return modelAndView;
+    }
+    @GetMapping(value = "/displayCourses")
+    public ModelAndView displayCourses(){
+        ModelAndView view=new ModelAndView("courses_secure.html");
+        List<Courses> courses=courseRepository.findAll();
+        view.addObject("course", new Courses());
+        view.addObject("courses",courses);
+        return view;
+    }
+
+    @PostMapping(value = "/addNewCourses")
+    public ModelAndView addNewCourses(@ModelAttribute(value = "name")Courses courses){
+        ModelAndView view=new ModelAndView("course_secure.html");
+        Courses courses1=courseRepository.save(courses);
+        view.setViewName("redirect:/admin/displayCourses");
+        return view;
     }
 }

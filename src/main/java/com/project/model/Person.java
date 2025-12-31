@@ -52,7 +52,7 @@ public class Person extends BaseEntity{
     private Classes classes;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "courses", joinColumns = {
+    @JoinTable(name = "person_courses", joinColumns = {
             @JoinColumn(name = "person_id", referencedColumnName = "personId")},
             inverseJoinColumns = {@JoinColumn(name = "course_id", referencedColumnName = "courseId")})
     List<Courses> courses=new ArrayList<>();
