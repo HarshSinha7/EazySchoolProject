@@ -8,6 +8,9 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Entity
 public class Person extends BaseEntity{
@@ -47,4 +50,10 @@ public class Person extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "class_id", referencedColumnName = "classId", nullable = true)
     private Classes classes;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "courses", joinColumns = {
+            @JoinColumn(name = "person_id", referencedColumnName = "personId")},
+            inverseJoinColumns = {@JoinColumn(name = "course_id", referencedColumnName = "courseId")})
+    List<Courses> courses=new ArrayList<>();
 }
