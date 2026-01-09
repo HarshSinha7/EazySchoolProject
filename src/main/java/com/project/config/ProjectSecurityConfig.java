@@ -27,6 +27,7 @@ public class ProjectSecurityConfig {
                         .requestMatchers("/dashboard").authenticated()
                         .requestMatchers("/displayMessages").hasRole("ADMIN")
                         .requestMatchers("/closeMsg/**").hasRole("ADMIN")
+                        .requestMatchers("/student/**").hasRole("STUDENT")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/", "/home").permitAll()
                         .requestMatchers("/holidays/**").permitAll()
